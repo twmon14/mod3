@@ -1,0 +1,42 @@
+mod* MOD3 {
+  pr(NAT)
+  [Sys]
+  op init : -> Sys {constr} .
+  op upd : Sys -> Sys {constr} .
+  op val : Sys -> Nat .
+  var S : Sys .
+  eq val(init) = 0 .
+  eq val(upd(S)) = (if val(S) < 2 then val(S) + 1 else 0 fi) .
+  --
+  op inv1 : Sys -> Bool .
+  eq inv1(S) = (val(S) < 3) .
+  --
+  var X : Nat .
+  ceq X + 1 < 3 = true if X < 2 .
+}
+
+-- eof
+
+open MOD3 .
+  red inv1(init) .
+close
+open MOD3 .
+  op s : -> Sys .
+  eq [IH :nonexec] : inv1(s) = true .
+  eq val(s) < 3 = true .
+  eq val(s) < 2 = true .
+  red inv1(s) implies inv1(upd(s)).
+close
+open MOD3 .
+  op s : -> Sys .
+  eq [IH :nonexec] : inv1(s) = true .
+  eq val(s) < 3 = true .
+  eq val(s) < 2 = false .
+  red inv1(s) implies inv1(upd(s)).
+close
+open MOD3 .
+  op s : -> Sys .
+  eq [IH :nonexec] : inv1(s) = true .
+  eq val(s) < 3 = false .
+  red inv1(s) implies inv1(upd(s)).
+close

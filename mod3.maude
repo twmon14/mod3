@@ -1,0 +1,35 @@
+mod MOD3 is
+  pr NAT .
+  sorts OComp Sys Config .
+  subsorts OComp < Sys .
+  op void : -> Sys [ctor] .
+  op __ : Sys Sys -> Sys [ctor assoc comm id: void] .
+  op {_} : Sys -> Config [ctor] .
+  op val:_ : Nat -> OComp [ctor].
+  var X : Nat .
+  rl [upd] : {(val: X)} => {(val: (if X < 2 then X + 1 else 0 fi))} .
+  op init : -> Sys .
+  eq init = (val: 0) .
+endm
+
+***(
+search [1] in MOD3 : {init} =>* {(val: X)} such that (not X < 3) .
+
+No solution.
+states: 3  rewrites: 21 in 2674921998ms cpu (0ms real) (0 rewrites/second)
+
+search [1] in MOD3 : {init} =>* {(val: 2)} .
+
+Solution 1 (state 2)
+states: 3  rewrites: 9 in 2675016998ms cpu (0ms real) (0 rewrites/second)
+empty substitution
+
+show path 2 .
+
+state 0, Config: {val: 0}
+===[ rl {val: X} => {val: if X < 2 then X + 1 else 0 fi} [label upd] . ]===>
+state 1, Config: {val: 1}
+===[ rl {val: X} => {val: if X < 2 then X + 1 else 0 fi} [label upd] . ]===>
+state 2, Config: {val: 2}
+
+)
